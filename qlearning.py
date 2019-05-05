@@ -9,8 +9,7 @@ rewardKill = -10000
 alpha = 0.1
 gamma = 1
 
-# Q[state] = (Nicht springen, springen)
-Q = None # defaultdict(lambda: [0, 0])
+Q = None
 
 with open("Q.pickle", "rb") as file:
     Q = defaultdict(lambda: [0, 0], pickle.load(file))
@@ -46,9 +45,7 @@ def onGameover(gameInfo):
 
     if gameCounter % 100 == 0:
         print(str(gameCounter) + ": " + str(np.mean(gameScores[-100:])))
-
-    # Q updaten für die vorherige Aktion
-    #  -> Die vorherige Aktion war nicht erfolgreich!
+        
     prevReward = Q[oldState]
     index = None
     if oldAction == False:
@@ -62,11 +59,7 @@ def onGameover(gameInfo):
 
     oldState = None
     oldAction = None
-
-    #if gameCounter % 10000 == 0:
-    #    with open("Q/qlearning10_" + str(gameCounter) + ".pickle", "wb") as file:
-    #        pickle.dump(dict(Q), file)
-
+    
     gameCounter+=1
 
 
@@ -77,9 +70,6 @@ def shouldEmulateKeyPress(params):
     state = paramsToState(params)
     estReward = Q[state]
 
-
-    # Q updaten für die vorherige Aktion
-    #  -> Die vorherige Aktion war erfolgreich!
     prevReward = Q[oldState]
     index = None
     if oldAction == False:
